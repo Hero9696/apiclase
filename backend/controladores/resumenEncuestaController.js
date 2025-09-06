@@ -1,5 +1,5 @@
 // controllers/resumenEncuestaController.js
-const model = require('../models/resumenEncuestaModel');
+const model = require('../model/resumenEncuestaModel');
 
 async function resumenEncuesta(req, res) {
     try {

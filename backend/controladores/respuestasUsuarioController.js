@@ -1,5 +1,5 @@
 // controllers/respuestasUsuarioController.js
-const model = require('../models/respuestasUsuarioModel');
+const model = require('../model/respuestasUsuarioModel');
 
 async function guardar(req, res) {
     const { UsuarioID, Respuestas } = req.body;
