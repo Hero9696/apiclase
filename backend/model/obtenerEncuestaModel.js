@@ -1,10 +1,10 @@
 // models/obtenerEncuestaModel.js
 const sql = require('mssql');
-const dbConfig = { /* ... tu configuración de BD ... */ };
+const { getConnection } = require('../../connect');
 
 async function obtenerEncuestaPorTipo(tipoEncuestaID) {
     try {
-        const pool = await sql.connect(dbConfig);
+        const pool = await getConnection();
         const result = await pool.request()
             .input('TipoEncuestaID', sql.Int, tipoEncuestaID)
             .execute('sp_ObtenerEncuestaPorTipo');

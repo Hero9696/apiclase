@@ -3,16 +3,24 @@ const model = require('../model/resumenEncuestaModel');
 
 async function resumenEncuesta(req, res) {
     try {
-        const resumen = await model.obtenerResumen(req.params.id);
-        if (resumen) {
-            res.setHeader('Content-Type', 'application/json');
-            res.send(resumen);
-        } else {
-            res.status(404).json({ message: 'Resumen no encontrado.' });
-        }
+        const id = parseInt(req.params.id);
+        console.log(`📌 Obteniendo resumen de encuesta ${id}`);
+
+        const resumen = await model.obtenerResumen(id);
+
+        res.json({
+            success: true,
+            data: JSON.parse(resumen)
+        });
+
     } catch (err) {
-        res.status(500).json({ message: 'Error interno del servidor.' });
+        console.error("❌ Error en /encuestas/resumen/:id =>", err.message);
+        res.status(500).json({
+            success: false,
+            error: err.message
+        });
     }
 }
 
 module.exports = { resumenEncuesta };
+

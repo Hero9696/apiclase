@@ -74,6 +74,23 @@
             </div>
           </div>
 
+          <!-- SELECCIÓN DE TIPO DE ENCUESTA -->
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <label for="tipo-encuesta" class="form-label fw-semibold">
+      Selecciona el tipo de encuesta <span class="required-asterisk">*</span>
+    </label>
+    <select id="tipo-encuesta" class="form-select" required>
+      <option value="" disabled selected>-- Elige una encuesta --</option>
+      <option value="1">Encuesta Académica</option>
+      <option value="2">Encuesta de Satisfacción</option>
+      <option value="3">Encuesta de Evaluación</option>
+    </select>
+    <div class="form-text">Selecciona el tipo de encuesta que deseas responder.</div>
+  </div>
+</div>
+
+
           <!-- PREGUNTAS -->
           <div id="questions" class="d-grid gap-3"></div>
 
@@ -88,218 +105,44 @@
       </div>
 
       <!-- PANE: RESUMEN -->
-      <div class="tab-pane fade" id="pane-resumen" role="tabpanel" aria-labelledby="tab-resumen">
-        <div id="summary" class="d-grid gap-3"></div>
-      </div>
+    <!-- PANE: RESUMEN -->
+<div class="tab-pane fade" id="pane-resumen" role="tabpanel" aria-labelledby="tab-resumen">
+  <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+      <label for="tipo-encuesta-resumen" class="form-label fw-semibold">
+        Selecciona el tipo de encuesta para ver su resumen <span class="required-asterisk">*</span>
+      </label>
+      <select id="tipo-encuesta-resumen" class="form-select" required>
+        <option value="" disabled selected>-- Elige una encuesta --</option>
+        <option value="1">Encuesta Académica</option>
+        <option value="2">Encuesta de Satisfacción</option>
+        <option value="3">Encuesta de Evaluación</option>
+      </select>
     </div>
   </div>
 
-  <!-- MODAL: payload enviado (mock) -->
-  <div class="modal fade" id="payloadModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Payload enviado (mock)</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body">
-          <pre class="bg-body-tertiary p-3 rounded" id="payloadPre" style="white-space: pre-wrap; word-break: break-word;"></pre>
-          <div class="alert alert-info mb-0"><i class="bi bi-info-circle me-1"></i>
-            En la integración real, este JSON se enviará con <code>fetch()</code> a tu API.
-          </div>
-        </div>
+  <div id="summary" class="d-grid gap-3"></div>
+</div>
+
+
+  <!-- MODAL: payload enviado -->
+ <div class="modal fade" id="payloadModal" tabindex="-1" aria-labelledby="payloadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="payloadModalLabel">Respuestas seleccionadas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div id="payloadPre" class="d-grid gap-2"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script>
-  // ============================
-  // 1) MOCKS (tus JSON)
-  // ============================
-  const resumenJson = {"EncuestaID":1,"Encuesta":"Encuesta de Conocimiento y Dominio","Descripcion":"Evalúa si el catedrático demuestra dominio y usa recursos adecuados.","Preguntas":[{"PreguntaID":1,"TextoPregunta":"¿Qué recursos tecnológicos brinda el catedrático para impartir el curso?","TotalOpcionesDisponibles":6,"NumeroUsuariosRespondieron":5,"TotalGeneralDisponibles":30,"TotalOpcionesSeleccionadas":10,"Porcentaje":33.33,"Carita":"&#128528;"},{"PreguntaID":2,"TextoPregunta":"¿Qué estrategias usa para explicar los temas?","TotalOpcionesDisponibles":5,"NumeroUsuariosRespondieron":5,"TotalGeneralDisponibles":25,"TotalOpcionesSeleccionadas":10,"Porcentaje":40.00,"Carita":"&#128528;"},{"PreguntaID":3,"TextoPregunta":"¿Qué materiales de apoyo entrega en clase?","TotalOpcionesDisponibles":5,"NumeroUsuariosRespondieron":5,"TotalGeneralDisponibles":25,"TotalOpcionesSeleccionadas":10,"Porcentaje":40.00,"Carita":"&#128528;"},{"PreguntaID":4,"TextoPregunta":"¿Qué herramientas usa para evaluar el aprendizaje?","TotalOpcionesDisponibles":5,"NumeroUsuariosRespondieron":5,"TotalGeneralDisponibles":25,"TotalOpcionesSeleccionadas":13,"Porcentaje":52.00,"Carita":"&#128528;"},{"PreguntaID":5,"TextoPregunta":"¿Qué medios utiliza para mantener actualizados los contenidos?","TotalOpcionesDisponibles":5,"NumeroUsuariosRespondieron":5,"TotalGeneralDisponibles":25,"TotalOpcionesSeleccionadas":10,"Porcentaje":40.00,"Carita":"&#128528;"}]};
-
-  const encuestaJson = {"EncuestaID":1,"Nombre":"Encuesta de Conocimiento y Dominio","Descripcion":"Evalúa si el catedrático demuestra dominio y usa recursos adecuados.","Preguntas":[{"PreguntaID":1,"TextoPregunta":"¿Qué recursos tecnológicos brinda el catedrático para impartir el curso?","Opciones":[{"OpcionID":1,"TextoOpcion":"Ejercicios prácticos resueltos"},{"OpcionID":2,"TextoOpcion":"Presentaciones y diapositivas"},{"OpcionID":3,"TextoOpcion":"Recursos tecnológicos como APIs o simuladores"},{"OpcionID":4,"TextoOpcion":"Videos explicativos"},{"OpcionID":5,"TextoOpcion":"Foros o plataformas de discusión"},{"OpcionID":6,"TextoOpcion":"No brinda nada"},{"OpcionID":91,"TextoOpcion":"Aplicaciones de ejemplo"}]},{"PreguntaID":2,"TextoPregunta":"¿Qué estrategias usa para explicar los temas?","Opciones":[{"OpcionID":7,"TextoOpcion":"Ejemplos prácticos en clase"},{"OpcionID":8,"TextoOpcion":"Analogías y casos reales"},{"OpcionID":9,"TextoOpcion":"Demostraciones en vivo"},{"OpcionID":10,"TextoOpcion":"Material escrito complementario"},{"OpcionID":11,"TextoOpcion":"Sesiones grabadas"},{"OpcionID":12,"TextoOpcion":"No utiliza ninguna estrategia clara"}]},{"PreguntaID":3,"TextoPregunta":"¿Qué materiales de apoyo entrega en clase?","Opciones":[{"OpcionID":13,"TextoOpcion":"Guías de estudio"},{"OpcionID":14,"TextoOpcion":"Banco de ejercicios"},{"OpcionID":15,"TextoOpcion":"Manuales o tutoriales"},{"OpcionID":16,"TextoOpcion":"Acceso a bibliografía digital"},{"OpcionID":17,"TextoOpcion":"Plantillas de trabajo"},{"OpcionID":18,"TextoOpcion":"No entrega materiales"}]},{"PreguntaID":4,"TextoPregunta":"¿Qué herramientas usa para evaluar el aprendizaje?","Opciones":[{"OpcionID":19,"TextoOpcion":"Exámenes cortos"},{"OpcionID":20,"TextoOpcion":"Quices prácticos en clase"},{"OpcionID":21,"TextoOpcion":"Trabajos de investigación"},{"OpcionID":22,"TextoOpcion":"Evaluaciones con software especializado"},{"OpcionID":23,"TextoOpcion":"Rúbricas de evaluación claras"},{"OpcionID":24,"TextoOpcion":"No utiliza herramientas de evaluación"}]},{"PreguntaID":5,"TextoPregunta":"¿Qué medios utiliza para mantener actualizados los contenidos?","Opciones":[{"OpcionID":25,"TextoOpcion":"Lecturas recientes de la materia"},{"OpcionID":26,"TextoOpcion":"Enlaces a artículos académicos"},{"OpcionID":27,"TextoOpcion":"Uso de software actualizado"},{"OpcionID":28,"TextoOpcion":"Referencias a normativas vigentes"},{"OpcionID":29,"TextoOpcion":"Comparación con tendencias actuales"},{"OpcionID":30,"TextoOpcion":"No actualiza los contenidos"}]}]};
-
-  // ============================
-  // 2) CARGA (Mock ahora, fetch real después)
-  // ============================
-  async function loadSurvey(){ return encuestaJson; }
-  async function loadSummary(){ return resumenJson; }
-
-  // ============================
-  // 3) RENDER – Responder
-  // ============================
-  function renderSurvey(survey){
-    document.getElementById("survey-title").textContent = survey?.Nombre ?? "Encuesta";
-    document.getElementById("survey-desc").textContent  = survey?.Descripcion ?? "";
-
-    const wrap = document.getElementById("questions");
-    wrap.innerHTML = "";
-
-    (survey?.Preguntas ?? []).forEach((q, idx) => {
-      const card = document.createElement("article");
-      card.className = "question-card card border-0 shadow-sm";
-
-      const headerId = `q-${q.PreguntaID}-hdr`;
-      const bodyId   = `q-${q.PreguntaID}-body`;
-
-      card.innerHTML = `
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-start">
-            <h5 id="${headerId}" class="card-title mb-2">
-              <span class="me-2 text-secondary">Q${idx+1}.</span>${q.TextoPregunta}
-              <span class="required-asterisk" title="Obligatoria">*</span>
-            </h5>
-            <span class="badge text-bg-primary-subtle text-primary-emphasis">Multiselección</span>
-          </div>
-          <div id="${bodyId}" class="d-grid gap-2"></div>
-        </div>`;
-
-      const body = card.querySelector(`#${bodyId}`);
-
-      (q.Opciones ?? []).forEach(opt => {
-        const optId = `q${q.PreguntaID}_opt${opt.OpcionID}`;
-        const label = document.createElement("label");
-        label.className = "option-pill";
-
-        label.innerHTML = `
-          <input class="form-check-input" type="checkbox" value="${opt.OpcionID}" name="q_${q.PreguntaID}" id="${optId}">
-          <span class="fw-medium">${opt.TextoOpcion}</span>
-        `;
-
-        body.appendChild(label);
-      });
-
-      wrap.appendChild(card);
-    });
-  }
-
-  // ============================
-  // 4) RENDER – Resumen
-  // ============================
-  function renderSummary(summary){
-    const container = document.getElementById("summary");
-    container.innerHTML = "";
-
-    const head = document.createElement("div");
-    head.className = "d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2";
-    head.innerHTML = `
-      <div>
-        <h4 class="mb-1">${summary.Encuesta}</h4>
-        <div class="small-muted">${summary.Descripcion ?? ""}</div>
-      </div>
-      <span class="badge text-bg-secondary-subtle text-secondary-emphasis">
-        <i class="bi bi-database-check me-1"></i> Resumen agregado
-      </span>`;
-    container.appendChild(head);
-
-    (summary.Preguntas ?? []).forEach((p, idx) => {
-      const card = document.createElement("article");
-      card.className = "card border-0 shadow-sm";
-
-      const pct = Number(p.Porcentaje ?? 0);
-      const emoji = document.createElement("span");
-      emoji.className = "emoji";
-      emoji.innerHTML = p.Carita ?? "&#128512;";
-
-      card.innerHTML = `
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-start">
-            <h6 class="card-title mb-2"><span class="me-2 text-secondary">Q${idx+1}.</span>${p.TextoPregunta}</h6>
-            <div>${emoji.outerHTML}</div>
-          </div>
-
-          <div class="progress mb-2" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">
-            <div class="progress-bar" style="width:${pct}%;"></div>
-          </div>
-
-          <div class="d-flex flex-wrap gap-2 small-muted">
-            <span class="stat-badge badge text-bg-light"><i class="bi bi-people me-1"></i>Respondieron: ${p.NumeroUsuariosRespondieron}</span>
-            <span class="stat-badge badge text-bg-light"><i class="bi bi-list-check me-1"></i>Opciones marcadas: ${p.TotalOpcionesSeleccionadas}</span>
-            <span class="stat-badge badge text-bg-light"><i class="bi bi-ui-checks me-1"></i>Total opciones disponibles: ${p.TotalOpcionesDisponibles}</span>
-            <span class="stat-badge badge text-bg-light"><i class="bi bi-collection me-1"></i>Total general disponibles: ${p.TotalGeneralDisponibles}</span>
-          </div>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
-
-  // ============================
-  // 5) SUBMIT (mock) – genera el JSON solicitado
-  // ============================
-  function collectAnswersToRequiredFormat(survey){
-    const userId = document.getElementById("user-id").value.trim();
-
-    // Recorremos TODAS las opciones marcadas de TODAS las preguntas
-    const checked = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'));
-    const respuestas = checked.map(c => ({
-      OpcionID: Number(c.value),
-      Seleccionado: 1
-    }));
-
-    // Devuelve EXACTAMENTE el esquema solicitado
-    return {
-      UsuarioID: userId,
-      Respuestas: respuestas
-    };
-  }
-
-  function setupSubmit(survey){
-    const form = document.getElementById("form-encuesta");
-    const modalEl = document.getElementById("payloadModal");
-    const pre = document.getElementById("payloadPre");
-    const modal = new bootstrap.Modal(modalEl);
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      // Validación mínima de Usuario
-      const userId = document.getElementById("user-id").value.trim();
-      if (!userId){
-        alert("Por favor ingresa tu Usuario.");
-        document.getElementById("user-id").focus();
-        return;
-      }
-
-      // Validación por pregunta: al menos una opción marcada por pregunta
-      const missing = (survey.Preguntas ?? []).filter(q =>
-        document.querySelectorAll(`input[name="q_${q.PreguntaID}"]:checked`).length === 0
-      );
-      if (missing.length){
-        alert(`Faltan ${missing.length} pregunta(s) por responder.`);
-        return;
-      }
-
-      // Construcción del payload con el formato requerido
-      const payload = collectAnswersToRequiredFormat(survey);
-
-      // En REAL:
-      // await fetch('/api/respuestas', {
-      //   method:'POST',
-      //   headers:{'Content-Type':'application/json'},
-      //   body: JSON.stringify(payload)
-      // });
-
-      pre.textContent = JSON.stringify(payload, null, 2);
-      modal.show();
-    });
-  }
-
-  // ============================
-  // 6) INICIO
-  // ============================
-  (async function init(){
-    const survey = await loadSurvey();
-    renderSurvey(survey);
-    setupSubmit(survey);
-
-    const summary = await loadSummary();
-    renderSummary(summary);
-  })();
-  </script>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="index.js"></script>
 </body>
 </html>
